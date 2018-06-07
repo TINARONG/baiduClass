@@ -18,6 +18,22 @@ module.exports= {
         // hot:true,//启动热更
         // open:true,//启动webpack-dev-server时自动打开浏览器
     },
+    module:{
+        rules:[{
+            test: /\.js$/,
+            loader: 'babel-loader',
+            query: {
+                presets: ['es2015']
+            }
+            }, {
+                test:/\.css$/,
+                use: ['style-loader','css-loader']
+            }, {
+                test: /\.vue$/,
+                loader: 'vue-loader'
+            }
+        ]
+    },
     plugins:[
         new HtmlWebpackPlugin({
             filename: 'index.html',//生成html的标题
@@ -26,10 +42,4 @@ module.exports= {
             // favicon:'path'//生成一个favicon，值为路径
         })
     ]
-    
-    // module:{
-    //     rules:[
-    //         {test:/\.css/,use:''}
-    //     ]
-    // }
 }
