@@ -1,5 +1,6 @@
 const path = require('path');//path为node.js核心模块，用于操作文件路径
 const HtmlWebpackPlugin = require('html-webpack-plugin')//用于生成html
+const { VueLoaderPlugin } = require('vue-loader')
 module.exports= {
     entry:{
         app: './src/main.js'
@@ -17,6 +18,11 @@ module.exports= {
         },
         // hot:true,//启动热更
         // open:true,//启动webpack-dev-server时自动打开浏览器
+    },
+    resolve: {//配置模块如何解析。例如，当在 ES2015 中调用 import "lodash"，resolve 选项能够对 webpack 查找 "lodash" 的方式去做修改
+        alias: {//创建 import 或 require 的别名，来确保模块引入变得更简单。
+            'vue': 'vue/dist/vue.esm.js'//webpack在node_modules取文件时的目录
+        }
     },
     module:{
         rules:[{
@@ -40,6 +46,7 @@ module.exports= {
             template: 'index.html',//html的文件名默认是index.html
             inject: true,//script标签位于html的什么位置默认true,即body底部（true,body,head,false）
             // favicon:'path'//生成一个favicon，值为路径
-        })
+        }),
+        new VueLoaderPlugin()
     ]
 }
