@@ -1,6 +1,7 @@
 /**
  * Created by Administrator on 2018/6/22.
  */
+//webpack 插件是一个具有 apply 属性的 JavaScript 对象。apply 属性会被 webpack compiler 调用，并且 compiler 对象可在整个编译生命周期访问。
 function ConsoleLogPlugin(options) {
     // options是配置文件，你可以在这里进行一些与options相关的工作
 }

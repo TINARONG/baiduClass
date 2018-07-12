@@ -3,13 +3,16 @@ const webpack = require("webpack");//启动热更必须
 const HtmlWebpackPlugin = require('html-webpack-plugin')//用于生成html
 const { VueLoaderPlugin } = require('vue-loader');
 const ConsoleLogPlugin = require("./plugin/console-log-plugin");
+
 module.exports= {
-    entry:{
+    entry: {
         app: './src/main.js',
-        vender:"./src/vender.js"//第三方库资源
+        // vendor: './src/vender.js'//获取生产环境依赖的库
     },
     output:{
         path:path.resolve(__dirname,'../dist'),//__dirname为当前路径
+        // chunkFilename: '[name].bundle.js',//拆分按需加载的文件名,[name]指向require.ensure定义的第三个参数;未被列在entry中，但有些场景需要被打包出来的文件命名配置
+        // publicPath: '/chunk/',// 输出解析文件的目录，url 相对于 HTML 页面就是按需加载单独打包出来的chunk是以publicPath会基准来存放的
         filename:'[name]_[hash].js'
     },
     devServer: {
@@ -19,7 +22,7 @@ module.exports= {
         overlay:{//在页面上显示错误
             errors:true
         },
-        hot:true,//启动热更,它允许在运行时更新各种模块，而无需进行完全刷新。不适用于生产环境
+        // hot:true,//启动热更,它允许在运行时更新各种模块，而无需进行完全刷新。不适用于生产环境
         // open:true,//启动webpack-dev-server时自动打开浏览器
     },
     //用于帮助找到模块的绝对路径。
@@ -29,21 +32,26 @@ module.exports= {
         }
     },
     module:{
-        rules:[{
-            test: /\.js$/,
-            loader: 'babel-loader',
-            query: {presets: ['es2015']}
-            }, {
+        rules:[ { test: /\.js$/,
+                exclude: /node_modules/,
+                loader: "babel-loader" },
+            {
                 test:/\.css$/,
-                use: ['style-loader','css-loader']
-            }, {
+                // use: ['style-loader','css-loader'],
+                loader: 'style-loader!css-loader',
+            },{
                 test: /\.vue$/,
                 loader: 'vue-loader'
-            }
+            },
+            {
+                test: /\.(woff2?|woff|eot|ttf|otf)(\?.*)?$/,
+                loader: 'url-loader',
+            },
         ]
     },
     //webpack 插件是一个具有 apply 属性的 JavaScript 对象。apply 属性会被 webpack compiler 调用，并且 compiler 对象可在整个编译生命周期访问。
     plugins:[
+        //这是来生成html文件的，它通过template选项来读取指定的模板index.ejs,然后输出到filename指定的文件
         new HtmlWebpackPlugin({
             filename: 'index.html',//生成html的标题
             template: 'index.html',//html的文件名默认是index.html
@@ -52,6 +60,10 @@ module.exports= {
         }),
         new VueLoaderPlugin(),
         new ConsoleLogPlugin(),
-        new webpack.HotModuleReplacementPlugin()//热更
-    ]
+        // new webpack.HotModuleReplacementPlugin(),//热更
+
+
+    ],
+
 }
+console.log(process.env.NODE_ENV )

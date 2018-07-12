@@ -1,8 +1,7 @@
 /**
- * Created by Administrator on 2018/6/11.
+ * Created by Administrator on 2018/7/9.
  */
-//这里import第三方库资源
-import printMe from "./js/print.js";
+import printMe from "./print.js";
 
 function component() {
     let element = document.createElement('div');
